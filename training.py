@@ -46,6 +46,9 @@ def train(model, train_loader, criterion, optimizer, device, epochs=10):
             correct += (predicted == labels).sum().item()
             print(epoch + i)
             i = i + 1
+
+            if i % 30 == 0:  # save every 30 batches
+                torch.save(model.state_dict(), 'model.pth')
         
         scheduler.step()
 
