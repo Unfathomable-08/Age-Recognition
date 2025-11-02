@@ -1,23 +1,7 @@
 from model import CNN
-from data_handler import CustomDataset
-from torch.utils.data import random_split, DataLoader
 import torch
 import torch.nn as nn
-
-dataset = CustomDataset('./images')
-
-train_size = int(0.8 * len(dataset))
-test_size = len(dataset) - train_size
-
-train_dataset, test_dataset = random_split(dataset, [train_size, test_size])
-
-train_loader = DataLoader(train_dataset, batch_size=64, shuffle=True, num_workers=4)
-test_loader = DataLoader(test_dataset, batch_size=64, shuffle=True, num_workers=4)
-
-print("Classes:", dataset.classes)
-print(f"Train samples: {len(train_dataset)} | Test samples: {len(test_dataset)}")
-
-
+from data_handler import train_loader
 
 def train(model, train_loader, criterion, optimizer, device, epochs=10):
     model.to(device)
@@ -58,7 +42,7 @@ def train(model, train_loader, criterion, optimizer, device, epochs=10):
         print(f"Epoch [{epoch+1}/{epochs}] - Loss: {epoch_loss:.4f} - Accuracy: {epoch_acc:.2f}%")
 
 
-model = CNN(num_classes=36)
+model = CNN(num_classes=8)
 criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.SGD(model.parameters(), lr=0.01, momentum=0.9, weight_decay=1e-4)
 scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=5, gamma=0.5)
