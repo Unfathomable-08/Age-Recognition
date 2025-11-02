@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-class CNN(nn.module):
+class CNN(nn.Module):
   def __init__(self, num_classes):
     super().__init__()
     self.conv1 = nn.Conv2d(1, 32, 3, padding=0) # in_chaanel = 1 for grayscale, out_channel = 32 features, kernel_sizs=3

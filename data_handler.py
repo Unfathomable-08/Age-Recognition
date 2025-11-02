@@ -14,6 +14,8 @@ class CustomDataset(Dataset):
             if f.lower().endswith('.png')
         ], key=lambda x: int(re.findall(r'\d+', os.path.basename(x))[0]))
 
+        self.classes = ["01-10", "21-30", "11-20", "41-55", "31-40", "56-65", "66-80", "88+"]
+
     def __len__(self):
         return len(self.image_paths)
 
