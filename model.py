@@ -22,6 +22,7 @@ class CNN(nn.Module):
     x = self.pool(self.bn2(self.conv2(x)))
     x = self.pool(self.bn3(self.conv3(x)))
 
+    print(x.shape)
     x = x.view(-1, 128 * 23 * 23)
 
     x = self.dropout(F.relu(self.bn4(self.fc1(x))))
