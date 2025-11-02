@@ -1,6 +1,6 @@
 import os
 import torch
-from torch.utils.data import Dataset
+from torch.utils.data import Dataset, random_split, DataLoader
 from PIL import Image
 import numpy as np
 import re
@@ -46,3 +46,16 @@ class CustomDataset(Dataset):
 
         label = self.get_label(idx)
         return image, torch.tensor(label).long()
+
+dataset = CustomDataset('./images')
+
+train_size = int(0.8 * len(dataset))
+test_size = len(dataset) - train_size
+
+train_dataset, test_dataset = random_split(dataset, [train_size, test_size])
+
+train_loader = DataLoader(train_dataset, batch_size=64, shuffle=True, num_workers=4)
+test_loader = DataLoader(test_dataset, batch_size=64, shuffle=True, num_workers=4)
+
+print("Classes:", dataset.classes)
+print(f"Train samples: {len(train_dataset)}")
