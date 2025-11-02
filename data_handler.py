@@ -39,7 +39,7 @@ class CustomDataset(Dataset):
     def __getitem__(self, idx):
         img_path = self.image_paths[idx]
         image = Image.open(img_path).convert('L')  # grayscale
-        image = image.resize((64, 64))  # or (200, 200) if you want original
+        image = image.resize((200, 200))  # or (200, 200) if you want original
         image = np.array(image).astype(np.float32) / 255.0
         image = (image - 0.5) / 0.5
         image = torch.tensor(image).unsqueeze(0)  # [1, H, W]
