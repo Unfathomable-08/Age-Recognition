@@ -34,7 +34,7 @@ def predict_age(image):
 # Create Gradio interface
 iface = gr.Interface(
     fn=predict_age,
-    inputs=gr.Image(label="Upload or Use Webcam", source="webcam"),
+    inputs=gr.Image(label="Upload or Use Webcam", tool="webcam"),
     outputs=gr.Textbox(label="Predicted Age Range"),
     title="Age Detector",
     description="Click the webcam button to capture your face and predict age!",
