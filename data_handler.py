@@ -1,0 +1,46 @@
+import os
+import torch
+from torch.utils.data import Dataset
+from PIL import Image
+import numpy as np
+import re
+
+class CustomDataset(Dataset):
+    def __init__(self, root_dir):
+        self.root_dir = root_dir
+        self.image_paths = sorted([
+            os.path.join(root_dir, f)
+            for f in os.listdir(root_dir)
+            if f.lower().endswith('.png')
+        ], key=lambda x: int(re.findall(r'\d+', os.path.basename(x))[0]))
+
+    def __len__(self):
+        return len(self.image_paths)
+
+    def get_label(self, idx):
+        # Define label ranges
+        ranges = [
+            (0, 2473, 0),
+            (2474, 3654, 1),
+            (3655, 5177, 2),
+            (5178, 6187, 3),
+            (6188, 7368, 4),
+            (7369, 8167, 5),
+            (8168, 8820, 6),
+            (8821, 9165, 7),
+        ]
+        for start, end, label in ranges:
+            if start <= idx <= end:
+                return label
+        raise ValueError(f"Index {idx} out of range for labeling.")
+
+    def __getitem__(self, idx):
+        img_path = self.image_paths[idx]
+        image = Image.open(img_path).convert('L')  # grayscale
+        image = image.resize((64, 64))  # or (200, 200) if you want original
+        image = np.array(image).astype(np.float32) / 255.0
+        image = (image - 0.5) / 0.5
+        image = torch.tensor(image).unsqueeze(0)  # [1, H, W]
+
+        label = self.get_label(idx)
+        return image, torch.tensor(label).long()
